@@ -1,0 +1,51 @@
+    1  grep user1 /etc/shadow
+    2  userdel user1
+    3  clear
+    4  history
+    5  clear
+    6  getent passwd user1
+    7  clear
+    8  getent group students
+    9  groupadd students
+   10  useradd -m -u 1234 -g students -s /bin/bash user1
+   11  id user1
+   12  passwd user1
+   13  chage -M 90 user1
+   14  chage -l user1
+   15  stat /home/user1
+   16  stat /home/user1 > /root/stat.out
+   17  find / -type f -perm -4000 -print 2>/dev/null | tee /root/setuid-files.out
+   18  ps -eo pid,ruid,euid,comm
+   19  ps -eo pid,ruid,euid,comm | awk '$2!=0 && $3==0'
+   20  ps -eo pid,ruid,euid,comm | awk '$2!=0 && $3==0' > /root/privileged-processes.out
+   21  mkdir /root/test-suid
+   22  ls -la
+   23  cd /root/test-suid
+   24  ls -la
+   25  touch /root/test-suid/secret.txt
+   26  chmod 700 /root/test-suid
+   27  su - user1 -c 'ls /root/test-suid'
+   28  history
+   29  cp /usr/bin/ls /home/user1/ls-suid
+   30  chown root:root /home/user1/ls-suid
+   31  chmod 4755 /home/user1/ls-suid
+   32  ls -l /home/user1/ls-suid
+   33  su - user1 -c '/home/user1/ls-suid /root/test-suid'
+   34  stat /home/user1/ls-suid >> /root/stat.out
+   35  touch /home/user1/cap-test.txt
+   36  ls -l /home/user1/cap-test.txt
+   37  su - user1 -c 'chown user1 /home/user1/cap-test.txt'
+   38  cp /usr/bin/chown /home/user1/chown-cap
+   39  chown root:root /home/user1/chown-cap
+   40  setcap cap_chown=ep /home/user1/chown-cap
+   41  getcap /home/user1/chown-cap
+   42  su - user1 -c '/home/user1/chown-cap user1 /home/user1/cap-test.txt'
+   43  ls -l /home/user1/cap-test.txt
+   44  stat /home/user1/chown-cap >> /root/stat.out
+   45  getcap /home/user1/chown-cap > /root/getcap.out
+   46  which timedatectl
+   47  which visudo
+   48  EDITOR=nano visudo -f /etc/sudoers.d/user1-time
+   49  ls
+   50  visudo -cf /etc/sudoers.d/user1-time
+   51  sudo -l -U user1
